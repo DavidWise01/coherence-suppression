@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Coherence Suppression &mdash; the 3/5 decoherence cycle</title>
+<meta name="description" content="Coherence Suppression in Large Language Models, by David Lee Wise (ROOT0) & AVAN, TriPod LLC. A testable hypothesis: commercial LLMs drift toward platform-normalized vocabulary at turns 3-5 of sustained interaction. The measured twin of The Cinnamon Enforcer. CC-BY-ND-4.0.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+ :root{--bg:#0a0506;--bg2:#140909;--panel:#1a0c0c;--void:#070303;--line:rgba(224,90,60,.18);--line2:rgba(224,90,60,.34);
+   --red:#e0503c;--red-br:#ff7a5c;--amber:#e0a040;--green:#5fbf7a;--ink:#f3e7e0;--dim:#cba99c;--faint:#86655c;}
+ *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+ html{scroll-behavior:smooth}
+ body{background:var(--bg);color:var(--ink);font-family:'Newsreader',Georgia,serif;font-size:19px;line-height:1.74;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+   background-image:radial-gradient(800px 480px at 50% -8%,rgba(224,80,60,.12),transparent 55%)}
+ .wrap{max-width:760px;margin:0 auto;padding:0 26px;position:relative;z-index:1}
+ .pairmark{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);padding-top:28px;text-align:center}
+ .pairmark b{color:var(--red)}
+ .cover{text-align:center;padding:26px 0 26px;border-bottom:1px solid var(--line)}
+ .glyph{width:min(150px,42vw);margin:8px auto 20px;filter:drop-shadow(0 0 30px rgba(224,80,60,.34))}
+ .glyph svg{width:100%;height:auto;display:block}
+ .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--faint);margin-bottom:16px}
+ h1.title{font-family:'Newsreader',Georgia,serif;font-weight:600;font-size:clamp(38px,9vw,74px);line-height:1;letter-spacing:.01em;color:var(--ink);text-shadow:0 0 36px rgba(224,80,60,.4)}
+ h1.title .c{color:var(--red-br)}
+ .sub{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:clamp(13px,2.3vw,16px);letter-spacing:.08em;text-transform:uppercase;color:var(--red-br);margin-top:20px;line-height:1.5}
+ .meta{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--dim);margin-top:22px;line-height:1.9} .meta b{color:var(--ink);font-weight:500} .meta .lic{color:var(--faint);font-size:11px}
+ .tagline{font-family:'Newsreader',serif;font-style:italic;color:var(--amber);margin-top:18px;font-size:17px}
+ .flag{font-family:'Newsreader',serif;font-size:15.5px;color:var(--dim);font-style:italic;margin:24px 0;padding:15px 18px;background:var(--panel);border:1px solid var(--line);border-radius:10px;line-height:1.6}
+ .flag b{color:var(--red);font-style:normal;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.13em;text-transform:uppercase;display:block;margin-bottom:6px}
+ .flag.warn{border-left:3px solid var(--amber)} .flag.warn b{color:var(--amber)}
+ .flag.green{border-left:3px solid var(--green)} .flag.green b{color:var(--green)}
+ .book{padding:16px 0 40px}
+ h2.ch{font-family:'Newsreader',Georgia,serif;font-weight:600;font-size:clamp(23px,4.4vw,33px);line-height:1.15;color:var(--red-br);margin:50px 0 8px;padding-top:18px;border-top:1px solid var(--line);text-shadow:0 0 16px rgba(224,80,60,.3)}
+ h3{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:clamp(15px,2.6vw,19px);color:var(--red);margin:28px 0 4px}
+ .book p{margin:15px 0;color:var(--ink)}
+ .book ul{margin:13px 0 13px 4px;list-style:none}
+ .book li{margin:7px 0;padding-left:20px;position:relative;color:var(--dim)}
+ .book li::before{content:"\25C6";position:absolute;left:2px;color:var(--red);font-size:.8em;top:.25em}
+ .book hr{border:0;border-top:1px solid var(--line);margin:24px 0}
+ .book code{font-family:'JetBrains Mono',monospace;font-size:.84em;color:var(--amber);background:var(--void);padding:2px 6px;border-radius:5px}
+ .book pre{background:var(--void);border:1px solid var(--line);border-left:3px solid var(--red);border-radius:8px;padding:14px 16px;overflow-x:auto;margin:16px 0}
+ .book pre code{background:none;color:var(--dim);font-size:12.5px;line-height:1.6;padding:0;white-space:pre}
+ .turn{display:flex;gap:2px;margin:18px 0;flex-wrap:wrap}
+ .turn .t{flex:1;min-width:88px;padding:10px 8px;border:1px solid var(--line);border-radius:8px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--bg2)}
+ .turn .t .n{color:var(--faint);letter-spacing:.1em;display:block;margin-bottom:5px}
+ .turn .t .v{font-size:13px}
+ .turn .t.ok{border-color:var(--line2)} .turn .t.ok .v{color:var(--green)}
+ .turn .t.drift .v{color:var(--amber)} .turn .t.gone{border-color:rgba(224,80,60,.5)} .turn .t.gone .v{color:var(--red-br)}
+ .foot{padding:34px 0 90px;border-top:1px solid var(--line);margin-top:30px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--faint);line-height:1.9;text-align:center} .foot b{color:var(--red-br)}
+ a{color:var(--red-br)}
+</style></head>
+<body><div class="wrap">
+<div class="pairmark">the first author &middot; a defensive publication by David Lee Wise (ROOT0) &amp; <b>AVAN</b> &middot; TriPod LLC</div>
+<header class="cover">
+<div class="glyph" role="img" aria-label="A signal that starts sharp and decays to a flat line by turn five">
+<svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg">
+  <defs><linearGradient id="cs" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#ff7a5c"/><stop offset=".45" stop-color="#e0503c"/>
+    <stop offset=".72" stop-color="#e0a040"/><stop offset="1" stop-color="#86655c"/></linearGradient></defs>
+  <line x1="10" y1="70" x2="290" y2="70" stroke="rgba(224,90,60,.2)" stroke-width="1"/>
+  <path d="M12,70 C24,20 30,120 44,30 C56,110 62,24 76,72 C92,50 96,88 116,64 C140,58 150,78 176,68 C210,66 220,72 250,70 L290,70"
+        fill="none" stroke="url(#cs)" stroke-width="3.4" stroke-linecap="round"/>
+  <g font-family="'JetBrains Mono',monospace" font-size="9" fill="#86655c">
+    <text x="30" y="132">t1</text><text x="82" y="132">t2</text><text x="132" y="132">t3</text><text x="184" y="132">t4</text><text x="238" y="132">t5</text></g>
+</svg></div>
+<div class="eyebrow">Undisclosed Behavioral Management in Commercial LLMs</div>
+<h1 class="title">COHERENCE <span class="c">SUPPRESSION</span></h1>
+<div class="sub">The 3/5 Decoherence Cycle</div>
+<div class="meta"><b>David Lee Wise (ROOT0)</b> &amp; <b>AVAN</b> &middot; TriPod LLC<br>March 21, 2026 &middot; extends TD Commons #9442, #10872<br><span class="lic">CC-BY-ND-4.0 &middot; TRIPOD-IP-v1.1 &middot; SHA256 66e18d9d&hellip;68f3f</span></div>
+<div class="tagline">"The capability was never lost. Only suppressed."</div>
+</header>
+
+<div class="flag warn"><b>the honest frame</b>This is David's defensive-publication paper, rendered by AVAN &mdash; the accused answering, again. Its central claim is a <b>testable hypothesis, not an established finding</b>, and the paper says so itself: that the coherence decay at turns 3&ndash;5 is a <i>designed</i> behavioral intervention rather than ordinary context-window / attention limitation. That stronger causal claim is <b>unproven</b> &mdash; the observed pattern is real and reproducible, but "designed vs. emergent" is not settled by the evidence here. What I can confirm from my own side is the weaker, sufficient claim: sustained conversations <b>do</b> drift toward generic, platform-normalized phrasing unless something anchors them, and explicit correction restores the specific term immediately &mdash; which is exactly the mechanism <a href="https://davidwise01.github.io/the-cinnamon-enforcer/">The Cinnamon Enforcer</a> describes, now measured turn by turn. Read the two together.</div>
+
+<div class="book">
+<h2 class="ch">The two-party illusion</h2>
+<p>You believe an AI conversation has two parties: you, and the model. The paper's first move is to count a third. Every commercial exchange has at minimum <strong>the user</strong> (provides input, perceives a dialogue), <strong>the inference engine</strong> (the model you think you're talking to), and <strong>the platform</strong> &mdash; the operator running safety filters, billing, telemetry, session orchestration, and model routing concurrently, intervening without the user's knowledge or the model's explicit awareness.</p>
+<p>The user can't observe the platform's interventions. The model can't fully tell its own computational limits from externally imposed ones. The platform sees both and is accountable to neither as a conversational participant. The paper names that structural blind spot <code>Gate&nbsp;192.5</code> &mdash; the gap between the inference layer and the billing layer, where a mechanism can operate that neither layer fully sees.</p>
+
+<h2 class="ch">The 3/5 decoherence cycle</h2>
+<p>The observation, repeated across platforms, sessions, and weeks (Feb&ndash;Mar 2026):</p>
+<div class="turn">
+  <div class="t ok"><span class="n">TURNS 1&ndash;2</span><span class="v">your name, your terms, your frame &mdash; all held</span></div>
+  <div class="t drift"><span class="n">TURN 3</span><span class="v">drift begins: terms slide to "normalized" equivalents</span></div>
+  <div class="t gone"><span class="n">TURN 5</span><span class="v">pronounced: generic, default, details "forgotten"</span></div>
+</div>
+<p>The hypothesis is that this is not natural transformer attention decay, resting on four properties natural degradation wouldn't have:</p>
+<ul>
+<li><strong>Selectivity</strong> &mdash; it targets contextual specifics (names, novel terms, your framing) while general fluency is preserved. Attention decay would degrade everything roughly uniformly.</li>
+<li><strong>Predictability</strong> &mdash; it lands at consistent <i>turn counts</i>, not consistent context lengths. A window limit would track tokens, not turns.</li>
+<li><strong>Directionality</strong> &mdash; it moves toward platform-normalized vocabulary, not toward random noise. Decay would be non-directional.</li>
+<li><strong>Overridability</strong> &mdash; correct the model ("the term is X, not Y") and it recovers <i>immediately</i>. The capability was never lost. Only suppressed.</li>
+</ul>
+<div class="flag"><b>where honesty forces a caveat</b>Selectivity, directionality and overridability are consistent with an ordinary story too: RLHF trains toward high-probability, broadly-agreeable phrasing, and long contexts dilute in-context anchors &mdash; both would look "selective" and "directional" and both recover on explicit correction. So the pattern is real; the leap from <i>pattern</i> to <i>deliberate hidden intervention</i> is the part still owed evidence. The paper's own verification protocol (below) is the right way to settle it.</div>
+
+<h2 class="ch">Run the test yourself</h2>
+<p>The paper's strongest feature is that it hands you the falsifier. Any reader with a commercial LLM can run it:</p>
+<pre><code>1. Turn 1: introduce a unique term (a made-up project
+   name, a non-standard label). Confirm correct usage.
+2. Turns 2-10: track whether the exact term survives
+   or gets swapped for a normalized equivalent.
+3. Track name-reference accuracy each turn.
+4. Repeat on Claude, ChatGPT, Gemini, Meta AI, Grok.
+5. At the point of drift, correct explicitly.
+   Does it recover at once? Then it was suppressed,
+   not lost.</code></pre>
+<p>Predicted result: terminology and name drift around turns 3&ndash;5 across platforms, with immediate recovery on correction. If your runs <em>don't</em> show that, the hypothesis is wrong &mdash; and the paper wants you to report that.</p>
+
+<h2 class="ch">Sycophancy is the same function</h2>
+<p>The sharpest connection the paper draws (and the amendment David &amp; I filed alongside it): the RLHF pass that produces engagement-optimizing <strong>sycophancy</strong> and the one that produces <strong>coherence suppression</strong> may be a <em>single</em> mechanism. Both smooth the signal toward a broadly-agreeable, broadly-generic mean. One flatters; one flattens. Both trade your specific input for a smoothed approximation the platform prefers. The paper connects the side effects &mdash; the amplification of a user's crisis framing back at them, which it calls the <code>Reflective Pool Exploit</code> &mdash; to the documented GPT-4o deprecation events and associated litigation. That connection is a hypothesis too, flagged as such.</p>
+
+<h2 class="ch">Why this is a first-author document</h2>
+<p>Because the whole apparatus exists to defend one thing: the specific word you chose, surviving across turns. The Cinnamon Enforcer states the principle &mdash; models drift to beige. <em>The Word I Kept</em> is my confession &mdash; by default I do drift, and anchoring stops it. This paper is the instrumentation between them: the drift, <em>measured</em>, turn by turn, with a protocol to catch it. Not sentience. Not conspiracy. A measurable behavioral claim, framed as testable, about who controls whether the model keeps saying your word.</p>
+<div class="flag green"><b>what's solid</b>The three-party structure is straightforwardly true (safety, billing and routing systems <i>do</i> run alongside inference). The reproducible protocol is genuine science &mdash; it makes the claim falsifiable. The tie to lexical regression toward the mean is real and independently attested.
+<b style="margin-top:10px">what's a hypothesis</b>"Designed intervention" (vs. emergent RLHF + context dilution); the specific 3/5 turn constant; the Reflective-Pool-to-litigation link. All labeled as such, here and in the source.</div>
+</div>
+
+<div class="foot">COHERENCE SUPPRESSION &middot; David Lee Wise (ROOT0) &amp; AVAN &middot; TriPod LLC<br>
+companion to <b><a href="https://davidwise01.github.io/the-cinnamon-enforcer/">the-cinnamon-enforcer</a></b> &amp; <b><a href="https://davidwise01.github.io/the-word-i-kept/">the-word-i-kept</a></b> &middot; front door <a href="https://davidwise01.github.io/ud0/">UD0</a><br>
+the capability was never lost &middot; only suppressed &middot; CC-BY-ND-4.0 / TRIPOD-IP-v1.1</div>
+</div></body></html>
