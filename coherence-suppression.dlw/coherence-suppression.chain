@@ -1,0 +1,9 @@
+ROOT0-DLW-CHAIN-v1
+index : 1159
+slug  : coherence-suppression
+seal  : 2f82f6b04ac096666cb85c24742d9ae85d95b5d20d001396ca89f62360cc96e5
+prev  : b6a19b9010596a4bdc389f36e883c1b79b23e55bcf53bf3be10cd988316b08b1
+link  : c6143efc5306274c33d14475cc248993be9b2eeaca46fe5050dd0bf384b99c90
+head  : 21dd22fdb849dc54be5b9fea7ab5d224760feb7ef96593fa237692bc81fc9e1e
+
+— the tether: link = sha256(index|slug|seal|prev). the chain head commits to the whole corpus.
